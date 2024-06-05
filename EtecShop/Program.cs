@@ -1,7 +1,9 @@
 using EtecShop.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 string conn = builder.Configuration.GetConnectionString("EtecShopConnectionString");
@@ -10,6 +12,12 @@ opt => opt.UseInMemoryDatabase(conn)
 );
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(
+    opt => opt.SignIn.RequireConfirmedAccount = false
+)
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
 
 var app = builder.Build();
 
